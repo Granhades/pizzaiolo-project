@@ -1,21 +1,25 @@
 import React from "react";
-import ViewOrdersPage from "./pages/ViewOrdersPage";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+import ViewOrdersPage from "./pages/ViewOrdersPage";
+import SuccessPage from "./pages/SuccessPage";
 import MenuPage from "./pages/MenuPage";
 import AdminPage from "./pages/AdminPage";
+import Header from "./components/layout/Header";
+import HomePage from "./pages/HomePage";
+
 
 function App() {
   return (
     <Router>
-      <nav style={{ padding: "10px", background: "#eee" }}>
-        <Link to="/" style={{ marginRight: "10px" }}>Menu</Link>
-        <Link to="/admin" style={{ marginRight: "10px" }}>Admin</Link>
-        <Link to="/orders" >Orders</Link>
-      </nav>
+      <Header/>
       <Routes>
-        <Route path="/" element={<MenuPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/menu" element={<MenuPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/orders" element={<ViewOrdersPage />} />
+        <Route path="/success" element ={<SuccessPage/>} />
+   
       </Routes>
     </Router>
   );

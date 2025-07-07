@@ -1,0 +1,5 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "redhat.java",
+  "files.autoSave": "onFocusChange"
+}

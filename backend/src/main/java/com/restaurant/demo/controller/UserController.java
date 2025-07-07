@@ -1,6 +1,8 @@
 package com.restaurant.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import java.util.Optional;
 
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Map;
 
 
 @RestController
@@ -41,13 +45,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
         if(existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())){
-            return "Login sucessfully";
+            Map<String, String> response = new HashMap<>();
+            response.put("username", existingUser.get().getUsername());
+            response.put("email", existingUser.get().getEmail());
+            return ResponseEntity.ok(response);
         }
         
-        return "Invalid credentials !";
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials!");
     }
     
     

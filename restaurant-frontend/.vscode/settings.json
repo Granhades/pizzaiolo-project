@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.autoSave": "onFocusChange",
+  "prettier.singleQuote": true,
+  "prettier.semi": false,
+  "prettier.trailingComma": "es5",
+  "prettier.jsxSingleQuote": true
+}

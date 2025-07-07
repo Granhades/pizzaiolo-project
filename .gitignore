@@ -30,4 +30,11 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+# Local launcher script (not needed in repo)
+projectLauncher.bat
+
+# Environment variables (sensitive info)
+backend/.env

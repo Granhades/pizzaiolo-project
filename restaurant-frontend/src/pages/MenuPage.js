@@ -7,11 +7,7 @@ function MenuPage() {
     const [order, setOrder] = useState([]);
     const [table, setTable] = useState("");
     const navigate = useNavigate();
-    //Sort
-    const [searchTerm, setSearchTerm] = useState('');
-    const [sortKey, setSortKey] = useState('name'); //name or price
-    const [sortOrder, setSortOrder] = useState('asc'); //ascendent or descendent
-
+    
     useEffect(() => {
     axios.get("http://localhost:8080/api/menu")
       .then(res => setMenu(res.data))

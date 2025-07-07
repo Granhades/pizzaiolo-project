@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 import java.util.List;
 
+
 @Document(collection = "orders")
 
 public class Order {
@@ -14,6 +15,15 @@ public class Order {
     private List<OrderItem> items;
     private String table;
     private Date date = new Date();
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     // Getters and setters
     public String getId() {

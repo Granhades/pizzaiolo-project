@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "vscjava.vscode-java-pack",
+    "vscjava.vscode-spring-boot-dashboard",
+    "vscjava.vscode-spring-initializr",
+    "mongodb.mongodb-vscode",
+    "eamodio.gitlens"
+  ]
+}

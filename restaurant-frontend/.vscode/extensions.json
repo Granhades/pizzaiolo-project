@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "xabikos.ReactSnippets",
+    "formulahendry.auto-rename-tag",
+    "ritwickdey.liveserver",
+    "csstools.postcss"
+  ]
+}
