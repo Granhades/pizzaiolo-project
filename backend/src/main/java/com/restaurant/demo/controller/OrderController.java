@@ -51,16 +51,23 @@ public class OrderController {
             List<Map<String, Object>> itemsWithNames = order.getItems().stream().map(item -> {
                 Optional<Dish> dishOpt = dishRepository.findById(item.getDishId());
                 String dishName = dishOpt.map(Dish::getName).orElse("Unknown");
+                double price = dishOpt.map(Dish::getPrice).orElse(0.0);
                 Map<String, Object> itemMap = new HashMap<>();
                 itemMap.put("dishId", item.getDishId());
                 itemMap.put("dishName", dishName);
                 itemMap.put("quantity", item.getQuantity());
+                itemMap.put("price", price);
                 return itemMap;
             }).collect(Collectors.toList());
 
             orderMap.put("items", itemsWithNames);
             return orderMap;
         }).collect(Collectors.toList());
+    }
+
+    @PutMapping("/order/{id}")
+    public Order updateOrder(@PathVariable String id, @RequestBody Order updatedOrder) {
+        return orderRepository.save(updatedOrder); // simple update
     }
 
     

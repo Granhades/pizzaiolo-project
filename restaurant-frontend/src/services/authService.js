@@ -17,6 +17,8 @@ export const register = async (userData) => {
 export const login = async (credentials) => {
     try {
         const res = await axios.post(`${API}/login`, credentials);
+        //Save info to LocalStorage
+        localStorage.setItem("user", JSON.stringify(res.data));
         return res.data;
     }
     catch (error)
