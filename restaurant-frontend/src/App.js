@@ -5,14 +5,14 @@ import ViewOrdersPage from "./pages/ViewOrdersPage";
 import SuccessPage from "./pages/SuccessPage";
 import MenuPage from "./pages/MenuPage";
 import AdminPage from "./pages/AdminPage";
-import Header from "./components/layout/Header";
+import Navbar from "./components/layout/Navbar";
 import HomePage from "./pages/HomePage";
 
 
 function App() {
   return (
     <Router>
-      <Header/>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/menu" element={<MenuPage />} />
