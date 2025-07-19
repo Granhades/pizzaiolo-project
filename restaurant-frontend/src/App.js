@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import ViewOrdersPage from "./pages/ViewOrdersPage";
-import SuccessPage from "./pages/SuccessPage";
+import BasketPage from "./pages/BasketPage";
 import MenuPage from "./pages/MenuPage";
 import AdminPage from "./pages/AdminPage";
 import Navbar from "./components/layout/Navbar";
@@ -16,10 +16,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/menu" element={<MenuPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/orders" element={<ViewOrdersPage />} />
-        <Route path="/success" element ={<SuccessPage/>} />
-   
+        <Route path="/basket/:orderId" element = {<BasketPage/>}/>
+        <Route path="/admin" element={<AdminPage />}/>
+        <Route path="/admin/orders" element={<ViewOrdersPage/>}/>
+
       </Routes>
     </Router>
   );

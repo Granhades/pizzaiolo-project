@@ -36,13 +36,18 @@ function MenuPage() {
     const items = Object.entries(order).map(([dishId, quantity]) => ({
       dishId,
       quantity,
+      
     }));
+
+    console.log("This is dishID from sendOrder" + items)
 
     axios
       .post("http://localhost:8080/api/order", { table, items })
-      .then(() => {
+      .then((res) => {
+        const orderId = res.data.id;
+        console.log("Response from backend:", res.data);
         setOrder({});
-        navigate("/success", { state: { table, items: detailedItems } });
+        navigate(`/basket/${orderId}`);
       })
       .catch((err) => alert("Error sending order: " + err.message));
   };
@@ -80,7 +85,7 @@ function MenuPage() {
     };
   });
 
-
+  
 
   return (
     <div className="min-h-screen bg-peach p-4">
