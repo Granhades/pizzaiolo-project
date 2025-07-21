@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PizzaCard from "../components/ui/PizzaCard";
+import PizzaioloCard from "../components/ui/PizzaioloWithSpeech";
+
 import pizzaioloImg from "../assets/images/chef.png";
 import pizzaboxEmpty from "../assets/images/pizzabox-empty.png";
 import pizzaboxFull from "../assets/images/pizzabox-full.png";
@@ -131,62 +133,33 @@ function MenuPage() {
           ))}
         </div>
 
-        {/* PIZZAIOLI + SPEECH + TOTAL */}
-        <div className="w-full lg:w-1/3 flex flex-col items-center text-center relative mt-8 lg:mt-0 transition-all duration-300 ease-in-out">
-          {/* SPEECH BUBBLE */}
-          <div
-            className={`relative mb-[-100px] w-64 md:w-80 lg:w-96 transition-transform duration-300 ${
-              isAnimating ? 'scale-105' : ''
-            }`}
-          >
-            <img src={speechBubble} alt="Speech Bubble" className="w-full" />
-            <div className="absolute top-[40%] left-[10%] right-[10%] text-center">
-              <p className="text-xs text-gray-700 font-semibold italic leading-snug break-words">
-                {selectedPizza
-                  ? selectedPizza.description
-                  : "Click a dish to hear the chef"}
-              </p>
-            </div>
-          </div>
+        <div className="flex flex-col items-center justify-start text-center gap-4 mt-4">
+      {/* CHEF WITH SPEECH */}
+      <PizzaioloCard text={selectedPizza} condition={!!selectedPizza} />
 
-          {/* CHEF */}
-          <img
-            src={pizzaioloImg}
-            alt="Chef"
-            className="w-80 z-10 mb-4"
-          />
+      {/* TABLE NUMBER INPUT */}
+      <input
+        type="text"
+        placeholder="Table number"
+        value={table}
+        onChange={(e) => setTable(e.target.value)}
+        className="p-2 border rounded shadow"
+      />
 
-          {/* TABLE NUMBER */}
-          <div className="text-center mb-4 w-full px-4">
-            <label
-              htmlFor="tableNumber"
-              className="block text-sm mb-1 text-chalk font-semibold"
-            >
-              Table number:
-            </label>
-            <input
-              id="tableNumber"
-              type="text"
-              value={table}
-              onChange={(e) => setTable(e.target.value)}
-              placeholder="Introduce your table number"
-              className="w-full rounded-md shadow-md px-4 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
-            />
-          </div>
+      {/* PIZZA BOX */}
+      <img
+        src={parseFloat(getTotal()) > 0 ? pizzaboxFull : pizzaboxEmpty}
+        alt="Pizza box"
+        className="w-24 cursor-pointer hover:scale-110 transition"
+        onClick={sendOrder}
+      />
 
-          {/* PIZZA BOX */}
-          <img
-            src={parseFloat(getTotal()) > 0 ? pizzaboxFull : pizzaboxEmpty}
-            alt="Pizza box"
-            className= "w-24 mt-2 cursor-pointer hover:scale-110"
-            onClick={sendOrder}
-          />
+      {/* TOTAL PRICE */}
+      <div className="mt-2 text-xl font-bold">TOTAL: {getTotal()} €</div>
 
-          {/* TOTAL */}
-          <div className="mt-4 text-xl font-bold">TOTAL: {getTotal()} €</div>
-        </div>
       </div>
     </div>
+  </div>
   );
 }
 
