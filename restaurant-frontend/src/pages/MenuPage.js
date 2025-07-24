@@ -135,7 +135,11 @@ function MenuPage() {
 
         <div className="flex flex-col items-center justify-start text-center gap-4 mt-4">
       {/* CHEF WITH SPEECH */}
-      <PizzaioloCard text={selectedPizza} condition={!!selectedPizza} />
+      <PizzaioloCard 
+      key={selectedPizza?.id || "default"}
+      text={selectedPizza} 
+      chef = {false}
+      speech={!!selectedPizza}/>
 
       {/* TABLE NUMBER INPUT */}
       <input
