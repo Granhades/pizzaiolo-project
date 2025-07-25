@@ -16,6 +16,45 @@ public class Order {
     private String table;
     private Date date = new Date();
     private String email;
+    private Status status = Status.ORDERING;
+
+    //Control order
+    private Date createdAt;
+    private Date confirmedAt;
+    private Date servedAt;
+
+    //Kitchen
+    private boolean kitchenSeen;
+    private String notes;
+
+    //Time METHODS
+
+    public Long getTimeToConfirm() {
+        if(createdAt != null && confirmedAt != null)
+        {
+            return (confirmedAt.getTime() - createdAt.getTime()) / 1000;
+        }
+        return null;
+    }
+    //Kitchen time
+    public Long getTimeToServe() {
+        if(kitchenSeen == true)
+        {
+            return(servedAt.getTime() - confirmedAt.getTime()) / 1000;
+        }
+        return null;
+    }
+
+
+
+   
+
+    //Status about order
+    public enum Status  {
+        ORDERING, CHECKING, CONFIRMED, PREPARING, READY
+    }
+
+    // Getters and setters
 
     public String getEmail() {
         return email;
@@ -25,7 +64,7 @@ public class Order {
         this.email = email;
     }
 
-    // Getters and setters
+    
     public String getId() {
         return id;
     }
@@ -56,5 +95,55 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
+    }
+
+     public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getConfirmedAt() {
+        return confirmedAt;
+    }
+
+    public void setConfirmedAt(Date confirmedAt) {
+        this.confirmedAt = confirmedAt;
+    }
+
+    public Date getServedAt() {
+        return servedAt;
+    }
+
+    public void setServedAt(Date servedAt) {
+        this.servedAt = servedAt;
+    }
+
+    public boolean isKitchenSeen() {
+        return kitchenSeen;
+    }
+
+    public void setKitchenSeen(boolean kitchenSeen) {
+        this.kitchenSeen = kitchenSeen;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

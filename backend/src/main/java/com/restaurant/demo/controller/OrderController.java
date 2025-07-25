@@ -2,16 +2,19 @@ package com.restaurant.demo.controller;
 
 import com.restaurant.demo.model.Dish;
 import com.restaurant.demo.model.Order;
+import com.restaurant.demo.model.Order.Status;
 import com.restaurant.demo.repository.DishRepository;
 import com.restaurant.demo.repository.OrderRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/order")
@@ -32,9 +35,33 @@ public class OrderController {
     // Create new order
     @PostMapping
     public Map<String, String> createOrder(@RequestBody Order order) {
+        order.setStatus(Order.Status.ORDERING);
+        order.setCreatedAt(new Date());
         Order saveOrder = orderRepository.save(order);
         return Map.of("id", saveOrder.getId());
     }
+
+    //Confirming the order & send to the kitchen
+    @PostMapping("/{id}/confirm")
+    public Map <String, Object> confirmToTheKitchen (@PathVariable String id) {
+        Optional<Order> orderOpt = orderRepository.findById(id);
+        if(orderOpt.isEmpty())
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORDER NOT FOUND");
+        }
+        Order order = orderOpt.get();
+        if(order.getStatus() != Status.ORDERING && order.getStatus() != Status.CHECKING)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error with status ordering. Not ordering or checking");
+        }
+        order.setStatus(Status.CONFIRMED);
+        order.setConfirmedAt(new Date());
+        orderRepository.save(order);
+
+        //Return the information about dishes
+        return mapOrderWithDishNames(order);
+    }
+    
 
     // Debug: get all orders raw
     @GetMapping("/debug")
@@ -66,9 +93,14 @@ public class OrderController {
             System.out.println("NOT FOUND in database");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
         }
-
-        System.out.println("FOUND: " + orderOpt.get().getTable());
-        return mapOrderWithDishNames(orderOpt.get());
+        Order order = orderOpt.get();
+        if(order.getStatus() != Status.ORDERING && order.getStatus() != Status.CHECKING)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Status error is not ordering or checking");
+        }
+        
+       
+        return mapOrderWithDishNames(order);
     }
 
     @GetMapping("/{id}")
@@ -78,9 +110,29 @@ public class OrderController {
         if (orderOpt.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
         }
-        return mapOrderWithDishNames(orderOpt.get());
+        Order order = orderOpt.get();
+        
+
+        return mapOrderWithDishNames(order);
 }
 
+    @GetMapping("/status/confirmed")
+    public List<Map<String,Object>> getConfirmedOrders()
+    {
+        List<Order> orders = orderRepository.findByStatus(Status.CONFIRMED);
+        return orders.stream()
+        .map(this::mapOrderWithDishNames)
+        .collect(Collectors.toList());
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Map<String,Object>> getOrdersByUser(@PathVariable String userId)
+    {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orders.stream()
+        .map(this::mapOrderWithDishNames)
+        .collect(Collectors.toList());
+    }
 
     // Update order
     @PutMapping("/{id}")
@@ -95,6 +147,8 @@ public class OrderController {
         orderMap.put("table", order.getTable());
         orderMap.put("email", order.getEmail());
         orderMap.put("date", order.getDate());
+        orderMap.put("timeToConfirm", order.getTimeToConfirm());
+        orderMap.put("timeToServe", order.getTimeToServe());
 
         List<Map<String, Object>> itemsWithNames = order.getItems().stream().map(item -> {
             Optional<Dish> dishOpt = dishRepository.findById(item.getDishId());
@@ -112,4 +166,6 @@ public class OrderController {
         orderMap.put("items", itemsWithNames);
         return orderMap;
     }
+
+
 }
