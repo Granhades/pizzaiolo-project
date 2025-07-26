@@ -35,6 +35,16 @@ public class OrderController {
     // Create new order
     @PostMapping
     public Map<String, String> createOrder(@RequestBody Order order) {
+        //Check at least 1 item
+        if(order.getItems() == null || order.getItems().isEmpty())
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ORDER EMPTY");
+        }   
+        //Check number of table is required
+        if(order.getTable() == null || order.getTable().isEmpty())
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "TABLE REQUIRED");
+        }
         order.setStatus(Order.Status.ORDERING);
         order.setCreatedAt(new Date());
         Order saveOrder = orderRepository.save(order);
@@ -52,7 +62,12 @@ public class OrderController {
         Order order = orderOpt.get();
         if(order.getStatus() != Status.ORDERING && order.getStatus() != Status.CHECKING)
         {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error with status ordering. Not ordering or checking");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "STATUS ERROR");
+        }
+        //If no user registered error
+        if(order.getUserId() == null || order.getUserId().isEmpty())
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NO USER REGISTERED");
         }
         order.setStatus(Status.CONFIRMED);
         order.setConfirmedAt(new Date());
@@ -72,6 +87,9 @@ public class OrderController {
     // Delete order by ID
     @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable String id) {
+        if (!orderRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORDER NOT FOUND");
+        }
         orderRepository.deleteById(id);
     }
 
@@ -85,18 +103,18 @@ public class OrderController {
 
     @GetMapping("/basket/{id}")
     public Map<String, Object> getOrderByIdForBasket(@PathVariable String id) {
-        System.out.println("Looking for order with ID: " + id);
+       
         
         Optional<Order> orderOpt = orderRepository.findById(id);
 
         if (orderOpt.isEmpty()) {
-            System.out.println("NOT FOUND in database");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
+            
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORDER NOT FOUND");
         }
         Order order = orderOpt.get();
         if(order.getStatus() != Status.ORDERING && order.getStatus() != Status.CHECKING)
         {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Status error is not ordering or checking");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "STATUS ERROR");
         }
         
        
@@ -108,7 +126,7 @@ public class OrderController {
         System.out.println("Getting order by ID (non-basket): " + id);
         Optional<Order> orderOpt = orderRepository.findById(id);
         if (orderOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORDER NOT FOUND");
         }
         Order order = orderOpt.get();
         
@@ -144,6 +162,7 @@ public class OrderController {
     private Map<String, Object> mapOrderWithDishNames(Order order) {
         Map<String, Object> orderMap = new HashMap<>();
         orderMap.put("id", order.getId());
+        orderMap.put("userId", order.getUserId());
         orderMap.put("table", order.getTable());
         orderMap.put("email", order.getEmail());
         orderMap.put("date", order.getDate());

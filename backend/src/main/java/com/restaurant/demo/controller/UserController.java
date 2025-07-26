@@ -30,27 +30,74 @@ public class UserController {
     private UserRepository userRepository;
     
     @PostMapping("/register")
-    public String register(@RequestBody User user)
+    public ResponseEntity <Map<String,String>> register(@RequestBody User user)
     {
+        Map<String, String> response = new HashMap<>();
+
+        //Check blank or null
+       if(user.getEmail() == null || user.getEmail().isEmpty())
+        {
+            response.put("error", "Email is required");
+            return ResponseEntity.badRequest().body(response);
+        }
+        if(user.getPassword() == null || user.getPassword().isEmpty())
+        {
+            response.put("error", "Password is required");
+            return ResponseEntity.badRequest().body(response);
+        }
+        if(user.getUsername() == null || user.getUsername().isEmpty())
+        {
+            response.put("error", "Username is required");
+            return ResponseEntity.badRequest().body(response);
+        }
+       
+        //Duplicates
         if(userRepository.findByEmail(user.getEmail()).isPresent()){
-            return "Email already in use";
+            response.put("error", "Email already registered");
+            return ResponseEntity.badRequest().body(response);
         }
         if(userRepository.findByUsername(user.getUsername()).isPresent())
         {
-            return "Username alredy in use";
+            response.put("error", "Username already registered");
+            return ResponseEntity.badRequest().body(response);
         }
 
         userRepository.save(user);
-        return ("User registered sucessfully");
+        response.put("message", "Created sucessfull!");
+        response.put("userId", user.getId());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+        Map<String, String> response = new HashMap<>();
+
+         //Check blank or null
+       if(user.getEmail() == null || user.getEmail().isEmpty())
+        {
+            response.put("error", "Email is required");
+            return ResponseEntity.badRequest().body(response);
+        }
+        if(user.getPassword() == null || user.getPassword().isEmpty())
+        {
+            response.put("error", "Password is required");
+            return ResponseEntity.badRequest().body(response);
+        }
+        if(user.getUsername() == null || user.getUsername().isEmpty())
+        {
+            response.put("error", "Username is required");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        //Validation
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
         if(existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())){
-            Map<String, String> response = new HashMap<>();
+            
+            response.put("message", "Login successful");
+            response.put("userId", existingUser.get().getId());
             response.put("username", existingUser.get().getUsername());
             response.put("email", existingUser.get().getEmail());
+
             return ResponseEntity.ok(response);
         }
         

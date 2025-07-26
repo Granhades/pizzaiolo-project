@@ -12,6 +12,7 @@ import java.util.List;
 public class Order {
     @Id //ID
     private String id;
+    private String userId;
     private List<OrderItem> items;
     private String table;
     private Date date = new Date();
@@ -55,6 +56,16 @@ public class Order {
     }
 
     // Getters and setters
+
+    public String getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
+    }
 
     public String getEmail() {
         return email;
