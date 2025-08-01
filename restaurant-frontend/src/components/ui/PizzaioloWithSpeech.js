@@ -25,7 +25,7 @@ function PizzaioloWithSpeech({ text, chef, speech }) {
 
     
 
-    <div className="pizzaiolo-wrapper flex flex-col items-center text-center relative my-6 transition-all duration-300 ease-in-out">
+    <div className="pizzaiolo-wrapper flex flex-col items-center text-center relative mt-0 mb-0 transition-all duration-300 ease-in-out">
       {/* SPEECH BUBBLE */}
       <div
         className={`relative w-72 md:w-96 mb-[-100px] transition-transform duration-300 ${
