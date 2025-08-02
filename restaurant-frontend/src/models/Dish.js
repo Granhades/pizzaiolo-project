@@ -6,5 +6,6 @@ export default class Dish {
         this.description = description;
         this.price = price;
         this.section = section;
+        
     }
 }
