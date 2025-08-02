@@ -18,7 +18,14 @@ const RegisterModal = ({ onClose, onSuccess }) => {
                 >
                     ✕
                 </button>
-                <RegisterForm onSuccess={onSuccess} />
+
+                {/* Aquí usamos solo el RegisterForm con la prop correcta */}
+                <RegisterForm
+                    onSuccess={(user) => {
+                        onSuccess(user); // Propaga el usuario al componente padre
+                        onClose();       // Cierra el modal
+                    }}
+                />
             </motion.div>
         </div>
     );

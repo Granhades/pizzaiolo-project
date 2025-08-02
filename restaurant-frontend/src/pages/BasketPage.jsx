@@ -8,6 +8,7 @@ import ConfirmAuthPopup from "../components/modals/ConfirmAuthPopup";
 import LoginModal from "../components/modals/LoginModal";
 import RegisterModal from "../components/modals/RegisterModal";
 
+
 function BasketPage() {
   const navigate = useNavigate();
   const { orderId } = useParams();
@@ -143,6 +144,16 @@ function BasketPage() {
       navigate(`/order-status/${orderId}`);
     } catch (err) {
       alert("Error confirming order :/" + err);
+    }
+  };
+
+  const handleConfirmClick = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if(!user || !user.userId) {
+      setShowAuthPopup(true);
+    }
+    else {
+      confirmOrder(user.userId);
     }
   };
 

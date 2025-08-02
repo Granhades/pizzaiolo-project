@@ -143,13 +143,13 @@ public class OrderController {
         .collect(Collectors.toList());
     }
 
+    // Get orders by user ID with enriched data
     @GetMapping("/user/{userId}")
-    public List<Map<String,Object>> getOrdersByUser(@PathVariable String userId)
-    {
+    public List<Map<String, Object>> getOrdersByUser(@PathVariable String userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
         return orders.stream()
-        .map(this::mapOrderWithDishNames)
-        .collect(Collectors.toList());
+                .map(this::mapOrderWithDishNames)
+                .collect(Collectors.toList());
     }
 
     // Update order

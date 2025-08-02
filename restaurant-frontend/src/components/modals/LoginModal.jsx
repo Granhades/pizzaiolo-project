@@ -1,6 +1,6 @@
 import React from "react";
-import LoginForm from "../forms/LoginForm"; //
-import { motion } from "framer-motion"; //
+import LoginForm from "../forms/LoginForm";
+import { motion } from "framer-motion";
 
 const LoginModal = ({ onClose, onSuccess }) => {
     return (
@@ -18,7 +18,13 @@ const LoginModal = ({ onClose, onSuccess }) => {
                 >
                     ✕
                 </button>
-                <LoginForm onSuccess={onSuccess} />
+
+                <LoginForm
+                    onSuccess={(user) => {
+                        onSuccess(user);
+                        onClose();
+                    }}
+                />
             </motion.div>
         </div>
     );

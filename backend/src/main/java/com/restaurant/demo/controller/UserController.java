@@ -72,35 +72,26 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody User user) {
         Map<String, String> response = new HashMap<>();
 
-         //Check blank or null
-       if(user.getEmail() == null || user.getEmail().isEmpty())
-        {
+        //Validate email && password
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
             response.put("error", "Email is required");
             return ResponseEntity.badRequest().body(response);
         }
-        if(user.getPassword() == null || user.getPassword().isEmpty())
-        {
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
             response.put("error", "Password is required");
             return ResponseEntity.badRequest().body(response);
         }
-        if(user.getUsername() == null || user.getUsername().isEmpty())
-        {
-            response.put("error", "Username is required");
-            return ResponseEntity.badRequest().body(response);
-        }
 
-        //Validation
+        // Find and verify user
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-        if(existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())){
-            
+        if (existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())) {
             response.put("message", "Login successful");
             response.put("userId", existingUser.get().getId());
             response.put("username", existingUser.get().getUsername());
             response.put("email", existingUser.get().getEmail());
-
             return ResponseEntity.ok(response);
         }
-        
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials!");
     }
     

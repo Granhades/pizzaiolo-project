@@ -16,7 +16,15 @@ function LoginForm({ onSuccess }) {
 
             localStorage.setItem("user", JSON.stringify(res.data));
             setMessage("Login successful");
-            if (onSuccess) onSuccess();
+            if (onSuccess && res.data.userId){
+                const user = {
+                    userId : res.data.userId,
+                    username : res.data.username,
+                    email : res.data.email,
+                }
+                onSuccess(user);
+            }
+
         } catch (err) {
             if (err.response) {
                 setMessage(err.response.data);

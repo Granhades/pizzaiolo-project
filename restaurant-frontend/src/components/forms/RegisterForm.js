@@ -15,7 +15,15 @@ function RegisterForm({ onSuccess }) {
         try {
             const res = await register(formData);
             setMessage("Registration successful!");
-            if (onSuccess) onSuccess();
+            if (onSuccess && res.userId){
+                const user = {
+                    userId : res.userId,
+                    username : res.username,
+                    email : res.email,
+                };
+                onSuccess(user);
+            }
+
         } catch (error) {
             setMessage("Registration failed: " + (error.message || error));
         }

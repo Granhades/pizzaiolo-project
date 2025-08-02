@@ -11,7 +11,17 @@ function Navbar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem("user"));
+        const storedUserString = localStorage.getItem("user");
+        let storedUser = null;
+        if (storedUserString) {
+            try {
+                storedUser = JSON.parse(storedUserString);
+                console.log("Parsed user:", storedUser); // Debug log
+            } catch (error) {
+                console.error("Error parsing user data from localStorage:", error);
+                localStorage.removeItem("user"); // Clear invalid data
+            }
+        }
         if (storedUser && storedUser.userId && storedUser.userId !== "userGuest") {
             setUserInfo(storedUser);
         } else {
@@ -78,8 +88,9 @@ function Navbar() {
             {showLoginModal && (
                 <LoginModal
                     onClose={() => setShowLoginModal(false)}
-                    onSuccess={() => {
-                        const user = JSON.parse(localStorage.getItem("user"));
+                    onSuccess={(user) => {
+                        console.log("Login success, user:", user); // Debug log
+                        localStorage.setItem("user", JSON.stringify(user));
                         setUserInfo(user);
                         setShowLoginModal(false);
                     }}
@@ -90,8 +101,9 @@ function Navbar() {
             {showRegisterModal && (
                 <RegisterModal
                     onClose={() => setShowRegisterModal(false)}
-                    onSuccess={() => {
-                        const user = JSON.parse(localStorage.getItem("user"));
+                    onSuccess={(user) => {
+                        console.log("Register success, user:", user); // Debug log
+                        localStorage.setItem("user", JSON.stringify(user));
                         setUserInfo(user);
                         setShowRegisterModal(false);
                     }}
@@ -100,5 +112,4 @@ function Navbar() {
         </div>
     );
 }
-
 export default Navbar;
