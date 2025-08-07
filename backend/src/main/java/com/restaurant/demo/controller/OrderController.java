@@ -9,6 +9,7 @@ import com.restaurant.demo.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -158,6 +159,35 @@ public class OrderController {
         return orderRepository.save(updatedOrder);
     }
 
+    // Update order status by name
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable String id, @RequestBody Map<String, String> body) {
+        Optional<Order> orderOpt = orderRepository.findById(id);
+        if (orderOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ORDER NOT FOUND");
+        }
+
+        Order order = orderOpt.get();
+        String newStatus = body.get("status");
+
+        try {
+            Order.Status statusEnum = Order.Status.valueOf(newStatus);
+            order.setStatus(statusEnum);
+
+            // Set timestamps based on status
+            if (statusEnum == Order.Status.CONFIRMED) {
+                order.setConfirmedAt(new Date());
+            } else if (statusEnum == Order.Status.READY) {
+                order.setServedAt(new Date());
+            }
+
+            Order updatedOrder = orderRepository.save(order);
+            return ResponseEntity.ok(mapOrderWithDishNames(updatedOrder));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("INVALID STATUS");
+        }
+    }
+
     // Helper to map Order + enrich items with dish names and prices
     private Map<String, Object> mapOrderWithDishNames(Order order) {
         Map<String, Object> orderMap = new HashMap<>();
@@ -166,6 +196,7 @@ public class OrderController {
         orderMap.put("table", order.getTable());
         orderMap.put("email", order.getEmail());
         orderMap.put("date", order.getDate());
+        orderMap.put("status",order.getStatus());
         orderMap.put("timeToConfirm", order.getTimeToConfirm());
         orderMap.put("timeToServe", order.getTimeToServe());
 

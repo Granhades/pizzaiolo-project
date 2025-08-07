@@ -44,7 +44,7 @@ function Navbar() {
                     <Link to="/">Home</Link>
                     <Link to="/menu">Menu</Link>
                     <Link to="/admin">Admin</Link>
-                    <Link to="/orders">Orders</Link>
+                    <Link to="/kitchen">Kitchen</Link>
                 </nav>
             </div>
 

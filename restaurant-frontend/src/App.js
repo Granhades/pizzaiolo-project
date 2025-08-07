@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import SuccessOrderPage from "./pages/SuccessOrderPage";
 import LoginForm from "./components/forms/LoginForm";
 import RegisterForm from "./components/forms/RegisterForm";
+import KitchenPage from "./pages/KitchenPage";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/basket/:orderId" element = {<BasketPage/>}/>
         <Route path="/order-status/:orderId" element={<SuccessOrderPage/>}/>
+        <Route path="/kitchen" element={<KitchenPage />} />
         <Route path="/admin" element={<AdminPage />}/>
         <Route path="/admin/orders" element={<ViewOrdersPage/>}/>
         <Route path="/login" element={<LoginForm/>}/>
