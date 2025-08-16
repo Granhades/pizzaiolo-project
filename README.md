@@ -17,7 +17,7 @@ The backend is built with **Java + Spring Boot + MongoDB** and follows a clean a
 
 Here’s the architecture of the backend:
 
-![Backend UML] (./backend-uml-structure.png)
+![Backend UML](./backend-uml-structure.png)
 
 ### 🎨 Color Legend
 - 🟨 Entities/Models
