@@ -138,7 +138,7 @@ function BasketPage() {
       await axios.put(`http://localhost:8080/api/order/${orderId}`, {
         ...order,
         userId: userId,
-        status: "PREPARING",
+        status: "CONFIRMED",
       });
       setPizzaioloEmotion("Your order is now being prepared!");
       navigate(`/order-status/${orderId}`);

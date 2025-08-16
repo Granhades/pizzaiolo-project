@@ -16,6 +16,7 @@ function KitchenPage() {
 
     const getNextStatus = (current) => {
         switch (current) {
+            case "ORDER" : return "CONFIRMED"
             case "CONFIRMED": return "PREPARING";
             case "PREPARING": return "READY";
             case "READY": return "CONFIRMED";
@@ -42,7 +43,8 @@ function KitchenPage() {
 
     const getStatusName = (status) => {
         switch (status) {
-            case "CONFIRMED": return "ORDER";
+            case "ORDER" : return "ORDER";
+            case "CONFIRMED": return "CONFIRMED";
             case "PREPARING": return "PACKING";
             case "READY": return "READY TO PICK UP";
             default: return "ORDER";
